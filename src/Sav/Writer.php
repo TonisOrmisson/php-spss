@@ -61,12 +61,12 @@ class Writer
     }
 
     /**
-     * @param array $data
      * @param string $file
+     * @param array $data
      *
      * @return Writer
      */
-    public static function createInFile($data = [], $file)
+    public static function createInFile($file, $data = [])
     {
         return new self($data, Buffer::factory(fopen($file, 'wb+')));
     }
