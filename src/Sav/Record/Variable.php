@@ -181,6 +181,8 @@ class Variable extends Record
                 $buffer->writeInt(0); // Print format for continuation
                 $buffer->writeInt(0); // Write format for continuation
                 $buffer->writeString($this->getSegmentName($i - 1), 8);
+                // Emit padding records for this continuation segment to keep alignment
+                $this->writeBlank($buffer, $segmentWidth);
             }
         }
     }
