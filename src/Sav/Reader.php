@@ -79,7 +79,11 @@ class Reader
             $recType = $this->_buffer->readInt();
             switch ($recType) {
                 case Record\Variable::TYPE:
-                    $variable               = Record\Variable::fill($this->_buffer);
+                    $variable = Record\Variable::fill($this->_buffer);
+                    // Skip continuation records (width -1) for very long strings; they are physical segments only.
+                    if ($variable->width === -1) {
+                        break;
+                    }
                     $variable->realPosition = $posVar;
                     $this->variables[]      = $variable;
                     $posVar++;
