@@ -173,15 +173,15 @@ class Variable extends Record
             $segmentCount = Utils::widthToSegments($this->width);
             for ($i = 1; $i < $segmentCount; $i++) {
                 $segmentWidth = Utils::segmentAllocWidth($this->width, $i);
+                $format       = Utils::bytesToInt([0, 1, max($segmentWidth, 1), 0]);
                 $buffer->writeInt(self::TYPE);
-                // Continuation record: width -1 marks string continuation per SPSS spec
-                $buffer->writeInt(-1);
+                $buffer->writeInt($segmentWidth);
                 $buffer->writeInt(0); // No variable label
                 $buffer->writeInt(0); // No missing values
-                $buffer->writeInt(0); // Print format for continuation
-                $buffer->writeInt(0); // Write format for continuation
+                $buffer->writeInt($format); // Print format
+                $buffer->writeInt($format); // Write format
                 $buffer->writeString($this->getSegmentName($i - 1), 8);
-                // Emit padding records for this continuation segment to keep alignment
+
                 $this->writeBlank($buffer, $segmentWidth);
             }
         }
